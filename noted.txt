@@ -1,0 +1,1324 @@
+Zoom Meeting ID: 990 4871 3185	people-material-information-equipment-energy
+Meeting Password: 911471
+Coach: Reza Marwansyah
+
+Week 1 - Cloud Foundation
+Week 2 - Linux
+Week 3 - Networking
+Week 4 - Security
+Week 5 - Python Programming
+Week 6 - Databases
+Week 7 - Jumpstart on AWS
+Week 8 - Jumpstart on AWS Advanced
+
+
+###############################################
+29/09/2022
+Inbound: siapa aja yang boleh masuk
+Outbound: siapa aja yang boleh keluar
+OSI Layer ada 7: application-presentation-session-transport-network-data link-physical
+OSI Layer merupakan kerangka logika terstruktur bagaimana data berinteraksi melalui jaringan
+FS (file sharing) kalau di cloud direkomendasikan 1 OS
+Perbedaan database dan storage: kalau di database ada engine-nya yaitu CRUD (create-read-update-delete)
+Di AWS ada Managed Service dan Unmanaged Sevice
+Hafalkan:
+*Compute Service: Amazon EC2, AWS Lambda, AWS Elastic Beanstalk, Amazon EC2 Auto Scaling, ECS, EKS, ECR, AWS Fargate
+*Security, Identity, and Compliance Service: IAM, Amazon Cognito, AWS Shield, AWS Artifact, AWS KMS
+*Storage Service: Amazon S3, S3 Glacier, EFS, EBS
+*Database Service: Amazon RDS, DynamoDB, Redshift, Aurora
+*Networking and Content Delivery services: Amazon VPC, route 53, CloudFront, Elastic Load Balancing
+*Management and Governance services: Amazon CloudWatch, AWS Trusted Advisor, CloudTrail, Well-Architected Tool, Auto Scaling, Command Line Interface, Config, Management Console, Organizations
+*AWS Cost Management Service: AWS cost and usage report, budgets, cost explorer
+Cara interaksi dengan AWS: AWS Management console dan CLI
+Ada 6 pertimbangan untuk memutuskan menggunakan cloud atau 6 perpective
+AWS pricing model: compute-storage-data transfer
+Cloud itu mahalnya di data transfer (data yang keluar akan berbayar)
+Pembayaran: pay for what you use-pay less when you reserve-pay less when you use more and as AWS grows
+Data inbound gratis dari internet ke S3
+Transfer data sesama region gratis (ketika keluar region maka berbayar)
+Keuntungan pricing calculator: estimates mountly, opportunity cost reduction
+Region(VPC(AZ(subnet))
+Subnet: IP public, IP private, IP elastic (ini ip statik dan berbayar)
+AZ: itu data center yang dibangun dengan fault isolation
+VPC: 
+Region: area geografis di dunia
+Perbedaan akses yang membuat adanya pembagian antara subnet, AZ, dan VPC, juga layanan yang tersedia
+Storage ada 3 konsep: object, block, archive (file)
+Memilih region: governance-latency-serviceAvailable-costs
+
+
+###############################################
+30/09/2022
+AWS bertanggung jawab terhadap keamanan of the cloud
+Secara sederhana customer bertanggung jawab atas keamanan di cloud
+Inti dari keamanan adalah performance
+Yang dimanage oleh customer: EC2, EBS, VPC
+Yang dimanage oleh AWS: lambda, RDS, Elastic Beanstalk
+Amazon Chime itu seperti Zoom
+Upgrade & patches OS EC2: customer
+Physical security: AWS
+Virtual infrastruktur: AWS
+EC2 Security Group: customer
+Jalan aplikasi: customer
+Oracle upgrades or pathces: AWS
+Jika oracle berjalan di EC2: customer
+Konfigurasi S3 bucket: customer
+S3= simple storage service
+S3 standard: sering digunakan (harga paling mahal) (paling redundant atau mampu memperbaiki)
+S3 intelligent tiering: akan atur apakah dimasukkan ke S3 standard atau glacier (melihat pola, ada biaya saat transfer data)
+S3 standard IA (Infrecuent Access): sama seperti S3 one zone-IA tetapi AZ>=3 (agak jarang diakses/immediate access)
+S3 one zone-IA: butuh backup di beda region (paling cocok untuk backup)
+S3 glacier: kebutuhan yang diakses 1 tahun 2 kali, jarang diakses
+S3 glacier deep archieve: paling lama dalam mengambil data minimal 12 jam
+Durability dari S3 itu 11 9s (99.9999999%)
+Faktor mempertimbangkan S3: storageclasstype-amountstorage-
+S3 bisa digunakan untuk static web hosting serta bisa memiliki nama bucket yang universal (tidak spesifik)
+EC2 instace itu VM atau virtual machine dengan OS, kontrol penuh.
+Keuntungan AMI: repeatability-reusability-recoverability
+Instance General purpose: kebutuhan biasa aja
+Instance compute-optimized: untuk compute
+Instance Memory-optimized: untuk database
+Instance Storage-optimized: untuk machine learning
+Instance Accelarated computing: distribusi file sistem/game
+Network:
+	ENI: default (gratis sudah dapat)
+	ENA: lebih cepat dan berbayar (paling bagus)
+	EFA
+Topologi: AWS CLOUD(Region(AZ(VPC(Subnet(instance)))))
+Key pair: suatu akses untuk dapat masuk ke EC2
+Ada 2 key pair public dan private, pastikan menyimpannya dengan aman!
+Start: memulai
+Stopped: berhenti tetapi tetap ada
+Terminated: hilang
+Pricing models:
+	onDemand: paling mahal, sesuai kebutuhan
+	reserved: sedikit murah karena bayar di awal & scheduled (booking)
+	spot: sewa lapak orang yang kosong atau tidak dipakai, kalau yang punya mau pakai maka akan di-		terminated (peringatan 2 menit)
+	dedicated: host (secara fisikal kita yang punya) dan instances (VM punya sendiri)
+
+
+###############################################
+03/10/2022
+Lab buat instance: start lab> klik AWS (yang ada tanda hijau)
+Security group itu ada inbound dan outbond: maksudnya jalur masuk dan keluar data
+Cara mendapatkan data saat SSH tidak bisa berjalan: pilih instance>actions>monitor and trobuleshoot>get instance screenshot
+Untuk dapat diakses maka perlu di-update port pada inbound menjadi 80 dan source: anywhere
+Cara resize instance atau server (karena kekecilan atau kebesaran (overkill)):
+	1. Pilih instance
+	2. Stop instance terlebih dulu: instance state>stop instance (server)
+	3. Tunggu hingga status menjadi stopped
+	4. Ganti dengan: actions> instance settings> pilih yang mau dibuah misalnya change instance type
+	5. Untuk mengubah EBS (elastic block storage): pada bagian Elastic Block Store pilih 	   volumes>actions>modify volume (ingat sebelumnya ceklis volume yang akan diubah)
+	6. Setelah upgrade atau downgrade maka kembali ke instance>instance state>start instance
+	7. Tunggu sampai status 2/2 running
+Hati-hati IP-nya akan berubah saat terjadi upgrade atau downgrade.
+Jika ingin menggunaan IP yang static maka perlu menggunkan layanan Elastic IP.
+Limit digunakan untuk memberikan batas dari instance, yang batasan itu kita tentukan (untuk perhitungan)
+Server di cloud itu ada famili, tipe, dan generasi.
+Terminate: instance state> terminate instance (untuk hapus instance atau server)
+Scurity group: menambahkan rule traffic yang diperbolehkan dan secara default mengijinkan outbound traffic
+Linux adalah perangkat lunak yang memiliki distro (distribution)
+Distro: redhat(kepala) ->(ada turunannya)...
+Cara melihatnya repo apa yang digunakan. Misalnya redhat menggunakan yum sedangkan ubuntu menggunkan apt
+Komponen linux: 
+	kernel->penghubung antara software dan hardware, kalau di windows disebut driver
+	daemons->ekstra support for user, seperti aplikasi
+	applications->aplikasi biasa dan aplikasi sistem
+	dataFiles->data seperti mp3, mp4, doc dsb
+	configurationFiles->pengaturan dari file, contohnya file dengan ekstensi .cnf, .conf, .dfg, .cf, .ini
+Kenapa kernel itu penting?: harus sesuai antara perangkat yang kita beli sehingga tidak boros
+Linux:close source, ringan (cocok untuk server)
+WIndows:open source, berat (tidak cocok untuk server),
+Kernel panic terjadi karena corrupt. Misalnya saat update dari 4.xx ke 5.xx itu ada backdriver yang tidak terinstall akibatnya terjadi mall function dan akhirnya corrupt. Saran dalam melakukan update kernel sebaiknya di backup terlebih dahulu, sehingga kalau terjadi kernel panic akan mudah untuk kembali
+Jangan update kernel kalau tidak terlalu dibutuhkan.
+Directories kalau di linux itu sama dengan folder di windows.
+/pictures/dog.gif -> itu disebut path, jadi setiap file itu memiliki path atau location dari file tersebut.
+man hostname: meninjau manual page
+Fedora > redhat > CentOS > Rocky
+Debian > Ubuntu
+OpenSUSE > 
+Amazon Machine Image (AMI) untuk windows install: putty
+us-east-1
+3.92.30.21
+file ppk itu adalah key pair
+ppk untuk putty
+pem untuk linux
+man man -> syntax untuk menampilkan halaman manual dari man
+us-east-1
+35.175.250.139
+
+###############################################
+04/10/2022
+pwd: path working directory (kita ada dimana)
+di linux .(file yang diawali titik) itu artinya hidden
+#: posisi user (user root)
+$: posisi hirarki (user standar)
+whoami: untuk mengetahui pakai user siapa
+sudo passwd root: memberikan password pada root user
+su root: syntax untuk masuk root user, su (switch user) sedangkan sudo (super)
+su -: juga digunakan untuk pindah ke user root dan memasukkan password
+root > sudo > user biasa
+id: mengetahui kekuasaan akses dari user
+history: mengetahui apa yang dilakukan user
+hostname: kita ada di server mana
+uptime: mengetahui server sudah berjalan berapa lama
+date: memeriksa waktu dan tanggal sekarang
+cal: melihat kalender
+clear: menghapus syntax
+echo itu seperti print, menggunakan tanda petik satu atau dua dan tidak bisa menggunkan bektik
+touch (nama file): untuk membuat file
+cat: priview atau melihat isi file
+nano: text editor (selainnya vi dan vim)
+sudo apt-get install nano: untuk install nano
+Kalau misalnya ingin mengakses file .pem melalui ubuntu di wsl bisa diakali dengan membuat file di nano dan diakses
+ls -l 1>file.txt: menyimpan data ke file.txt
+who -H -a: menampilkan siapa yang login ke server
+cal -j: kalender julian atau kalender hari yang berlanjut
+cal -m: ini sama dengan cal
+cal -s: kalender dimulai dari hari sunday
+ctr+r -> untuk reverse sehingga mencari history berdasarkan karakter unik
+head -n 5 :menampilkan 5 data teratas
+tail -n 2 :menampilkan 2 data terbawah
+sudo useradd (nama user): untuk membuat user baru
+sudo userdel (nama user): untuk menghapus user
+user mod -d (path): membuat user dengan path
+devs:x:10004:mmajor -> artinya dalam group devs ada password x dengan id 10004 dan user mmajor
+Cara buat group:
+	1. sudo groupmod -n (nama group)
+	2. untuk menambahkan user: sudo usermod -aG (nama group kalau ada dua pisahkan dengan koma) (nama 		user)
+	3. untuk memilih admin: sudo gpasswd -a (nama user) (nama group)
+sudo su === su root (jadi identik antara sudo su dan su root)
+sudo nano /etc/sudoers: otorisasi tertinggi dalam mengubah konfigurasi user dalam group
+
+###############################################
+05/10/2022
+su (switch user) command activates full administrative permissions
+sudo (super user do) command activates only
+IAM itu mengambil konsep dari linux
+Apabila memiliki IAM yang memiliki permission yang sama maka bisa dimasukkan ke dalam group sehingga cukup membuat satu permission
+Best practice untuk daily sebaiknya menggunakan IAM
+Cara buat user:
+	1. login ssh
+	2. syntax: sudo useradd arosalez
+	3. syntax: sudo passwd arosalez
+	4. masukkan password (tidak perlu khawatir tidak terlihat ketik saja)
+	5. lihat atau validasi user: sudo cat /etc/passwd | cut -d: -f1 (tanda | disebut pipe)
+	6. buat group: sudo groupadd (nama group)
+	7. lihat atau validasi group: cat /etc/group
+	8. memasukkan user ke group: sudo usermod -aG (nama group) (nama user)
+Saat root password lupa itu sulit maka hati-hati untuk menyimpan
+GUI itu opsional dalam linux, semua konfigurasi dalam linux itu formatnya text file
+Vim itu anak dari vi. Semua distribusi linux terinstal vi
+Vim tidak ada tombolnya.
+untuk keluar dari vi gunakan tombol esc
+:w : save
+:q : quit tanpa save
+:wq : save dan quit
+:wq! : keluar tanpa save
+:q! : keluar vim tanpa save
+Vim itu sebetulnya vi improved
+Nano itu default text editor tetapi tidak semua distro sudah ada, jadi perlu diinstall
+^ tanda itu artinya ctrl
+Secara default linux itu ada 3 text editor: vim(CLI, nano(CLI), dan gedit (GUI)
+l : link atau short path
+d : directory atau folder
+vimtutor : untuk melihat syntax dari vim
+mkdir (nama folder): membuat folder
+rmdir (nama folder): menghapus folder
+mv (nama folder lama) (nama folder baru): mengubah nama folder
+rwx: r(read/membaca file) w(write/change file content) x(execute/run program)
+chmod g+w file_1 : symbolic mode
+chmod 764 file_2 : absolute mode
+user permissions>group permissions>other permissions
+chown new-owner:new-group file1: urutannya command user:group file
+u (user or owner)
+g (group)
+o (other)
+r (read)
+w (write)
+x (execute)
++ (grants a permission)
+- (removes a permission)
+= (removes a permission and sets a new one)
+ls -l : untuk melihat permission
+chown : untuk mengubah ownership
+
+###############################################
+06/10/2022
+File system di linux itu hirarki biasa disebut FHS (file system hierarchy standard)
+/ : root
+/boot : boot files and kernel
+/dev : device
+-l : long format
+-h : file size
+-a : show all file
+more (nama file) : ini untuk file yang panjang sehingga tidak bisa dibuka dengan cat
+less (nama file) : ini membuka file yang pendek sehingga tidak bisa dibuka dengan cat
+cp (filenya atau lokasi filenya) (lokasi yang akan dituju dan nama filenya) : meng-copy file
+mv : memiliki dua arti bisa move bisa rename
+touch (nama file) : untuk membuat file
+python dan sql pelajari sendiri!
+pwd : mengetahui lokasi atau path saat ini
+../user/joko -> relative
+c:/user/joko -> absolut
+hash : 
+cksum : untuk mengecek corrupt file sebelum dicopy dan sesudah dicopy, jika nilainya beda maka corrupt
+find (path) -name (nama file atau ekstensi) : menemukan file
+./ :posisi sekarang
+../ : posisi satu tingkat dia atas
+~/ : posisi home directory
+grep : untuk filtering file contoh: ls -l /etc | grep .conf
+Perbedaan find dan grep adalah kalau find itu untuk nyari lokasi sedangkan grep itu untuk saringan kriteria
+diff : membandingkan antar file contoh: diff file1 file2
+link ada 2, yaitu hard link (jika dihapus maka akan terhapus data utamanya) dan soft link (tidak terhapus data utamanya jika terhapus)
+ln -s namafile shortcut.txt : contoh membuat symbolic link
+cat >> namafile kemudian ketik isinya dan akhiri ctrl+c : untuk menulis di file
+tar -cvf file1.tar * : semua file akan dikompres ke dalam file1.tar
+tar -xf file1.tar : untuk mengekstrak file tar
+gzip file1.tar : ekstensinya menjadi 
+gzip -d file1.tar : kompres file
+best practicenya setelah dilakukan tar maka dilakukan gzip, biasanya ini untuk backup
+bisa dari file langsung ke gzip tetapi tidak terkompres sehingga ikuti best practice
+touch : membuat file
+mkdir : membuat folder
+di windows tidak bisa buka file .tar.gz
+sudo apt-get install zip : untuk isntall zip
+kalau di linux kita bisa copy dari file ekstensi tertentu ke ekstensi lain
+-rwx rwx rwx : itu urutannya user>group>other
+ll : untuk melihat permission dari setiap file atau folder
+nilai r (4) w (2) x (1)
+kalau di windows file execute adalah .exe sedangkan di linux adalah .sh
+Jangan memberikan akses 777 itu berbahaya
+Dalam bash shell itu spasi adalah delimiter atau separator
+* (star) : wildcard atau menunjuk semua number dan karakter
+? (hook) : wildcard atau menunjuk semua karakter 
+; : chain atau dua syntax yang digabung
+rm file_12?.txt : menghapus seluruh file yang memiliki nama file_12.txt (ex. file_12001, file 12002 dst)
+[] (brackets) : menemukan karakter yang ada di dalam brackets
+
+###############################################
+07/10/2022
+Ada aplikasi ada sistem
+ps : untuk mengetahui proses (proccess status)
+pstree : untuk mengetahui percabangan proses
+Dalam proses yang besar biasanya ada parrent dan child
+ps -ef : untuk mengetahui uid dari proses yang berjalan
+kill (no PID) : untuk menghentikan proses
+Proses yang hanya bisa dihentikan adalah proses yang running dan bukan yang suspend
+pidof (nama proses) : untuk melihat proses ID
+top : semacam task manager seperti di windows (cara keluar pencet q)
+htop : task manager untuk linux yang lebih berwarna
+task status di top 
+	1. running
+	2. sleep (termasuk suspend masuk ke sleeping)
+	3. stopped
+	4. zombie -> proses yang sudah ditutup namun childnya masih ada
+swap : mengambil kepasitas harddisk untuk dijadikan virtual RAM
+nice -5 bash : menjalankan aplikasi yang belum berjalan
+renice -5 bash : menjalankan aplikasi yang sudah berjalan
+setting angka dari -20 (prioritas awal) sampai 19 (tidak prioritas)
+jobs : proses yang akan di mulai dan diatur oleh nomor job teridentifikasi (ini juga untuk melihat proses yang sedang di minimize)
+bg : background process (minimize process)
+fg : foreground process (maximize process/menampilkan minimize)
+at 1003 : jalankan proses pada waktu 10:03
+cron : menjalankan tugas pada waktu tertentu
+crontab -a (filename) : 
+crontab.guru/ -> situs untuk setting waktu crontab
+df : untuk memeriksa disk space
+sudo systemctl enable httpd : untuk membuat systemctl berjalan
+vmstat : untuk melihat virtual memory yang digunakan
+Bash adalah born shell
+Penulisan variabel: camelCase, CapitalCase, kebab-case, snake_case, ALLCAPS
+Misal pembuatan variabel:
+	restart_student="Joko"
+	echo $restart_student
+env : menampilkan variabel yang ada di environtment
+unset : menghapus variabel yang ada di environtment
+aliases : digunakan untuk membuat syntax lebih sederhana, misalnya a='clear', sehingga bisa gunakan a
+unalias : digunakan untuk membatalkan alias
+saat terminal ditutup alias akan hilang, untuk dijadikan permanen perlu dimasukkan ke bashrc
+wget dan curl digunakan untuk retrieval utilities
+Saat download menggunakan wget jika terputus maka bisa dilanjutkan sedangkan pada curl jika terputus maka akan mengulang
+
+###############################################
+10/10/2022
+#!/bin/bash -> ini adalah shebang untuk di dalam file .sh atau file eksekusi
+ingat untuk mengubah file .sh agar bisa dieksekusi (x) gunakan chmod 774 (nama file)
+cara menjalankan ./(nama file .sh)
+shebang penting digunakan saat mengimplementasikan crown
+pwd -> posisi saat ini
+ls -> untuk melihat file apa yang ada di pwd
+ll -> untuk melihat permission yang kita miliki atas file
+chmod -> untuk mengubah permission
+Contoh buat kode di coba.sh:
+	#!/bin/bash
+	
+	NAMA='Joko Purnomo'
+	echo $NAMA
+	#mkdir siapa.txt
+
+	jumlah=$(($1+$2))
+	echo $1 ditambah $2 sama dengan $ jumlah
+	----------------------------------------
+	cara menjalankan: ./coba.sh 4 5
+	akan menghasilakan: penjumlahan dari 4 dan 5
+Contoh membuat kondisi:
+	#!/bin/bash
+
+	if cp file1 file2;
+	then
+		rm file1;
+	fi
+touch (nama file): untuk membuat file
+untuk memindahkan file:
+	#!/bin/bash
+
+	if cp file1 /home;
+	then
+		rm file1;
+	fi
+Cara membuat else:
+	#!/bin/bash
+	if cp file1 file2;
+	then
+		rm file1;
+		echo 'Berhasil di copy'
+	else
+		echo 'Filenya Ngga ada!'
+	fi
+tree : untuk melihat folder (sebelumnya install dulu: apt install tree)
+bahasa di shellscripting itu seperti php tetapi nanggung karena dia itu bapaknya php
+spasi di dalam terminal itu berpengaruh
+Di terminal 0: true sedangkan 1: false
+-q : equal
+-ne : not equal
+-gt : greater than
+-ge : greater than or equal
+dst...
+Cara membuat looping:
+	#!/bin/bash
+	
+	for ok in 1 2 3 4 5 a b c;
+	do
+		echo "Nilai valuenya adalah" $ok;
+	done
+Cara membuat looping dengan until statemen
+	#!/bin/bash
+
+	counter=1
+	until [ $cpimter -gt 10];
+	do
+		echo $counter
+		((counter++))
+	done
+	echo 'Loop exited'
+	echo 'Counter equals $counter'
+exit : untuk keluar
+cara membuat variabel dengan dollar $, misalnya $1 artinya variabel pertama
+-y : dalam sebuah perintah itu artinya auto yes
+logging adalah semua kejadian system, events, app, service biasanya untuk audit
+ada 7 level dalam loging(emergency, alert, critical, error, warn, notice, info, debug)
+grep digunakan untuk mencari log file dengan kata kunci sedangkan find mencari filenya.
+log akan terus bertambah untuk mencatat kejadian, biasanya dilakukan retention selama 3 bulan
+IT system admin biasanya bekerja untuk log
+
+###############################################
+11/10/2022
+Internet pertama pada tahun 1960.
+Host dan node saling terhubung
+LAN: computer-switch-computer
+Switch dibagi dua: managed (bisa diatur traffic) dan unmanaged (tidak bisa diatur)
+Kalau internet, switch harus dihubungkan dengan router terlebih dahulu
+Kabel yang digunakan UTP (standar cat 5e, cat6, cat8)
+OSI model: physical-dataLink-network-transport-session-presentation-application
+Load balancer: application-network-gateway-classic
+Alamat didalam jaringan ada IP (internet protocol) dan MAC (media access control)
+ipconfig/all : untuk melihat MAC address di windows
+OSI model:
+1. physical
+2. data link-> data disebut frame, menggunakan MAC
+3. network-> menggunakan IP
+Server: provides a response to a request from client computer over a network
+LAN card atau NIC di cloud AMAZON disebut network interface di bagian EC2
+ENI: elastic network interface -> default dan gratis
+ENA: elastic network adapter -> lebih cepat dan berbayar
+EFA: elastic 
+Kabel jaringan: fiberOptic(cepat tapi sensitif)-coaxial(lambat tapi kuat)-twistedPair(kabel LAN yang biasanya ada warnanya)
+switch: layer 2 di dalam OSI (network device yang menghubungkan banyak komputer)
+router: network device yang mengubungkan banyak switch
+router yang standar adalah mikrotik (CCR atau cloud core router) sedangkan yang cukup mahal biasanya menggunakan cisco
+router beroperasi di layer 2 dan 3
+modem: sekarang anamanya adalah ONT yaitu pengubung rumah dan internet
+Tipe jaringan: LAN-WAN
+-28 s.d. -8 adalah range yang bagus untuk FO
+Topologi jaringan: physical(menggunakan kabel)-logical(menggunakan data)
+Logika topologi di AWS adalah VPC
+VPC seperti data center yang bisa disimpan apapun
+Antar vpc saling terisolasi, jika ingin berkoneksi maka harus dilakukan routing
+Kalau sesama vpc menggunakan vpc pairing
+Dalam region tetapi di luar VPC seperti s3 dan dynamoDB maka untuk menghubungkannya menggunakan endpoint atau gateway.
+AWS Outposts digunakan untuk menghubungkan antara data center on cloud dan on premise
+AWS site-to-site juga digunakan untuk menghubungkan antara dc oncloud dan onpremise
+Syncronous -> nunggu sedangkan asyncronous -> barengan
+IP itu mirip dengan MAC, bedanya IP itu ada static dan dynamic.
+TCP -> seperti minum secara benar melalui mulut
+UDP -> minum namun antara botol dan mulut berjauhan
+tracert google.com : untuk mengetahui tracing yang dilewati
+ping google.com : untuk mengetahui berapa lama respon (semakin kecil semakin bagus)
+IP class private: A (10.0.0.0) B(172.16.0.0) C(192.168.0.0)
+IPv4 ada 32 bit -> 4 oktet
+perhatikan: ||||||||.||||||||.||||||||.||||||||
+		angka minimal 0 dan maksimal 255
+		|    |    |    |    |    |    |    |
+	       2^7  2^6  2^5  2^4  2^3  2^2  2^1  2^0
+	       128  64   32   16   8    4    2    1
+
+CIDR: kependekan dari classless inter-domain routing
+Untuk menyelesaikan masalah ec2:
+	1. pastikan topologinya sudah sesuai
+	2. catat ip address setiap ec2
+	3. lakukan remote ssh, boleh pakai putty atau linux
+	4. 
+
+Cara bicara sebagai solution architect: Mohon maaf bapak atau ibu, kami sudah melakukan analisa, ternyata konfigurasi pada ip publik belum tersedia sehingga tidak bisa dijangkau oleh internet.
+
+Syarat bisa remote ke ec2 yang tidak memiliki ip public:
+1. Satu subnet atau satu asosiasi routing table
+2. Pegang key pair
+3. Security group bisa masuk
+4. Network ACL dapat ijin
+
+instance B 10.0.10.140	35.173.246.154
+instance A 10.0.10.92	x
+Di dalam Network ACL ada security group, dan di dalam SG ada ec2 
+
+IPv6 ada 128bit ->  heksa
+secara default di ec2 menggunakan dynamic
+
+###############################################
+12/10/2022
+Ingat VPC itu pasti ada di dalam region
+Di dalam vpc ada az, setiap VPC terisolasi dengan VPC lain
+Analogi tradisional vs cloud:
+Data center >< VPC
+Router >< route table -> mengatur traffic dari mana ke mana
+switches >< subnet
+firewall >< security group dan network ACL
+server/os >< ec2 instance
+modem >< internet gateway
+AWS mengambil 5 IP
+CIDR block digunakan untuk mendesain IP
+Paling kecil di aws itu /28 sedangkan paling besar /16
+1 VPC berarti 1 IGW (internet gateway), jadi perbandingannya 1:1
+NAT itu sebagai gateway yang ada di private tidak perlu expose ip public untuk akses internet
+Ingat tanpa internet gateway maka tidak bisa berkoneksi dengan internet
+1 AZ bisa banyak subnet, sedangkan 1 subnet pasti 1 AZ
+Security group itu statefull yang hanya mengontrol traffic outbond
+Secara default security group itu block all traffic, tidak ada deny hanya ada allow.
+Security group itu menempel di ec2 atau instance level.
+Network ACL (access control limit) itu stateless
+Secara default network ACL deny all traffic, sehingga ada deny dan ada allow.
+Network ACL itu menempel di subnet atau subnet level.
+NAT gateway untuk menghubungkan ec2 instance yang biasanya antara private subnet dan public subnet.
+VPC adalah pondasi service yang bekerja untuk banyak service:
+	1. OpsWorks:
+	2. DynamoDB:
+	dst...
+Setiap VPC memiliki security group yang berbeda
+
+Public test server: 184.72.66.154
+Private test server: 10.0.10.120
+Saat di reboot:
+	Public test server: 184.72.66.154
+	Private test server: 10.0.10.120
+Setelah di stop dan di start:
+	Public test server: 3.80.227.160
+	Private test server: 10.0.10.120
+Kesimpulan: ip private tidak berubah, tetapi ip public secara default akan dinamik atau berubah
+Bicara ke customer: Jadi bapak/ibu kalau ingin ip public nya tidak berubah bisa menggunakan layanan ip static, namun ada biaya yang dikeluarkan.
+Server DHCP (dynamic host configuration protocol) secara default akan membuat ip address berubah dengan dinamis
+Buat VPC, subnet, tag itu tidak berbayar
+Agar subnet menjadi publik harus disetting:
+	1. Enable IP Public
+	2. Buat IGW > attach ke VPC (perhatikan di VPC sudah ter-attched)
+	3. Buat route di route table > 0.0.0.0/0 sesuai target vpc (untuk terhubung ke internet)
+	4. Subnet associations > pilih subnet yang sudah dibuat > save associations
+CIDR: classless inter-domain routing -> istilah subnetting
+Jaringan adalah bagaimana komputer terhubung dengan komputer lain atau device lain.
+IP address digunakan untuk mengirim paket informasi.
+cara mendapatkan ip di windows > buka cmd> ketik ipconfig atau ipconfig/all
+/24 -> nilai subnet 255.255.255.0
+
+###############################################
+13/10/2022
+Amazon : Jeff Bezos (12 Januari 1964)
+Microsoft : Bill Gates (28 Oktober 1955)
+Google : Larence Edward Page (26 maret 1973)
+Subnet adalah teknik untuk membuat partisi dari network, tujuannya:
+	1. Minimize traffic
+	2. Memaksimumkan efisiensi dari alamat IP
+	3. Agar sisa alamat IP tidak dimanfaatkan oleh hacker
+oktet	bit	perubahan			keterangan
+0-126	/8	network host    host    host -> jadi lebih banyak yang bisa digunakan (host)
+128-191	/16	network network host    host -> lebih sedikit yang bisa diubah (host)
+192-223	/24	network network network host -> semakin sedikit yang bisa diubah
+
+||||||||.||||||||.||||||||.00000000   =   255.255.255.0
+
+Kalau kurang paham perhitungan IP bisa menggunakan kalkulator di https://jodies.de/ipcalc
+HTTP itu 80
+HTTPS itu 443
+Kalau untuk download sebaiknya gunakan wget sedangkan untuk memeriksa saja guankan curl
+Buat apa sih ping? untuk uji bahwa server tersebut berjalan atau untuk melihak konektivitas
+Jika hasil ping itu RTO atau request timed out maka server tidak berjalan
+Ping menggunakan protokol icmp sehingga jika ingin melakukan ping harus diaktifkan pada security groupnya dengan protokol icmp dan 0.0.0.0/0
+Traceroute (ip tujuan) : melihat route apa yang dilewati untuk mencapai halaman yang dituju
+netstat -tp : untuk melihat
+netstat -ntlp :
+nmap netstat ->
+install telnet untuk mengetahui portnya: sudo yum install telnet -y
+telnet (ip tujuan) 80 : 
+httpd -> web server apache, ada banyak web server seperti nginx, dll
+systemctl status httpd : melihat status dari httpd, jika belum diinstall tentu diinstall dulu
+jika sudah diinstall perlu dilihat juga apakah sudah enable, dan jika sudah enable baru bisa di start.
+sudo systemctl enable httpd.service : untuk enable httpd
+sudo systemctl start httpd : untuk start httpd
+Troubleshoot :
+	1. Cek network di VPC
+		*subnet: apakah terasosiasi
+		*route: apakah benar
+		*internet gateway: apakah ter-attached
+		*network ACL: perhatikan inbound dan outbound
+	2. Cek di instance
+		*security group: perhatikan inbound dan outbound
+Transport: TCP (lambat tetapi memastikan sampai) dan UDP (cepat tetapi tidak memastikan sampai)
+Apps Protocol: HTTP, SSL, TLS, mail protocol (SMTP, POP, IMAP), remote desktop (RDP, SSH)
+Man. support protocol: DNS, FTP, DHCP, ICMP
+FTP port 21
+SSH port 22
+SFTP port 22
+DNS port 53
+sudo hping3 -S -c 50 -V (ip address) : untuk melihat apcket yang loss
+mtr -n -T -c 200 (ip address) : untuk melihat lebih detail tentang jaringan
+telnet (ip address) : untuk menguji port apakah terbuka atau tidak
+nslookup (nama domain) : diagnostic tools untuk melihat IP
+nmap (nama domain) : untuk memindai apakah ada port yang terbuka
+
+###############################################
+14/10/2022
+Elastic IP baik digunakan maupun tidak maka billing sudah berjalan
+Untuk buat VPC secara otomatis jika ingin menggunakan elastic ip maka buat dulu elastic IP baru VPC-nya
+
+		--------------------	--------------------
+	       |AZ-A		   |	|AZ-B
+        ---VPC---------------------------------------
+	|      ||------------------|      ------------------
+	|      ||Public subnet 1  ||	 |Public subnet 2  |
+	|      ||Private subnet 1 ||	 |Private subnet 2 |
+	|      ||NAT gateway      ||	 |-----------------|
+	|      ||-----------------||
+
+Agar public subnet 2 dan private subnet 2 dapat berkoneksi ke internet maka perlu diasosiasikan ke public subnet 1 dan private subnet 1.
+
+###############################################
+17/10/2022
+Cybersecurity berfokus bagaimana melindungi jaringan, device, sistem dan informasi digital
+CIA -> confidentiality(akes yang tidak dijinkan)-integrity(data yang benar)-availability(jangan terlalu overprotective)
+at rest -> Amazon KMS
+in transit -> Amazon ACM (SSL/TLS)
+Istilah keamanan:
+	Attacker: orang yang melakukan penyerangan
+	Vulnerability: celah yang bisa dimasuki
+	Threat: potensi impak negatif dari sistem
+	Breach: berkompromi dengan sistem
+	Control: melakukan kendali
+13.256 tipe breach incidents di Amerika Utara pada tahun 2020
+Tipe ancaman: malware (aplikasi jahat), ransomware (dihalangi sistem kecuali telah bayar), denial of service (serangan tipuan), man in the middle, phishing (memberikan umpan seperti hadiah untuk mendapatkan informasi), social engineering (ini lebih ke teknik psikologi)
+AWS waf untuk mengatasi DoS
+Security strategy: apa yang akan dilindungi, kapan implementasi atau lifecycle, siapa yang akan mengerjakannya
+Tipe kendali keamanan: preventive, detective, corrective
+Absensi bisa menggunakan clockify
+Security lifecycle: prevention-detection-response(jangan mengganggu customer)-analysis
+Prevention merupakan fase pertama dalam security lifecycle yaitu pencegahan.
+	1. Identifikasi aset (network, server, aplikasi)
+	2. Vulnerability aset (port, devices exposed, security patches, hard coded/non encrypt)
+	3. Implement countermeasures (melakukan hal-hal yang terukur)
+di AWS folder itu disebut prefix, di linux disebut dictionary, di windows disebut folder
+const PORT = 8000 -> itu disebut hard code
+const PORT = /env/DB_PORT -> itu disebut soft code
+layerd defense as castle: moat < outer wall < inner wall < keep
+di security juga menggunakan OSI layer
+mengukur security prevention dengan network hardening, systems hardening, dan data security controls
+Prinsip least previlege in identity management atau memberikan akses seperlunya dan dalam jangka waktu
+Network hardening adalah aktivitas yang bertujuan melakukan layer di network, agar jika ada akses yang tidak terotorisasi bisa diblock
+Tipe network yang menjadi ancaman, yaitu: network mapping, port scanning, dan traffic sniffing
+Ping dulu untuk tahu IP addressnya kemudian nmap untuk melihat port apa yang terbuka
+nmap -sCV -T4 -vv (IP) : untuk memindai lebih dalam
+wireshark : aplikasi untuk security juga
+Amazon inspector: menemukan port yang dapat dijangkau di sebuah EC2 instance
+Web tier instance
+Application tier instance
+Database tier instance
+Network segmentation memiliki keuntungan: improve network traffic performance dan lebih mudah dalam management security
+soft: 
+semi: 
+hard: 
+Amazon inspector: untuk melihat ada masalah apa di instance
+Session manager: untuk remote dari fitur Amazon
+
+###############################################
+18/10/2022
+Network hardening adalah aktivitas di dalam layer keamanan untuk melindungi jaringan
+System hardening adalah aksi pengamanan melalui computing untuk melindungi dari serangan
+Prevention: fase 1 (network hardening) fase 2 (system hardening)
+Urutannya: authentication(siapa kamu)-authorization(surat ijin)-accounting(informasi tercatat)
+Secara default di linux tidak di hardened, cara untuk hardened hilangkan proses yang tidak dibutuhkan
+Rekomendasi system hardening client:
+	1. Antivitus
+	2. Aplikasi yang hanya diperlukan
+	3. Gunakan aplikasi update
+	4. Hilangkan removable seperti flashdisk
+	5. Kontrol download
+Tools untuk system hardening di AWS:
+	1. AWS Trusted Advisor -> 
+	2. Amazon GuardDuty -> 
+	3. AWS Shield -> untuk DDoS
+	4. AWS CloudTrail -> untuk log
+Patching adalah menyamakan versi setiap aplikasi, mengapa?, karena kalau kita bicara environment maka perlu menyelaraskan versi masing-masing agar tidak terjadi crash atau bug
+Jadi hardening dilakukan untuk 2 hal, yaitu network dan system, kalau di network dibuat lapisan sedangkan di system versinya harus sama
+Data in motion: datanya berputar dari satu device ke device lain
+Data at rest: datanya tetap di sebuah storage
+Enkripsi data ada 2 konsep, yaitu simetrik (kuncinya sama) dan asimetrik (kuncinya beda)
+The imitation game -> film yang bagus
+SSL itu jadul, TLS itu versi yang terbaru
+Simetrik enkripsi lebih cepat daripada asimetrik
+Contoh simetrik:
+	pengirim a menggunakan kunci x dan penerima b menggunakan kunci x
+	pengirim b menggunakan kunci x dan penerima a menggunakan kunci x
+Contoh asimetrik:
+	pengirim a menggunakan kunci x dan penerima b menggunakan kunci x
+	pengirim b menggunakan kunci y dan penerima a menggunakan kunci y
+contoh hybrid:
+	pengirim a menggunakan kunci public dan penerima b menggunakan kunci private
+AWS cloudHSM (hardware security module) : hanya bisa berjalan di VPC (hati-hati saat hilang kuncinya)
+AWS KMS (key management system) : bisa menggunakan multi-tenant
+Hashing: dilakukan untuk integritas dari data, yaitu agar tidak terjadi corrupt
+Permission: kalau di linux rwx, nah, kalau di cloud itu ada read, write dan full control
+Contoh ARN: arn:aws:kms:us-east-1:289360505243:key/51c7eea0-a654-4d95-8964-4a69f39d1c3a
+Credential itu tidak boleh hard code
+
+###############################################
+19/10/2022
+Tindakan prevention yaitu network hardening, system hardening, selanjutnya public key infrastructure (PKI)
+PKI digunakan untuk menghindari phising atau penyamaran dari situs palsu, ini berbayar ya
+PKI memastikan kepercayaan melalui hirarki, dengan komponen:
+	1. certificate authorities (CAs) : sertifikat yang diberikan oleh otoritas yang juga bersertifikat
+	2. certificates : sertifikat yang didapat dari CAs server
+	3. revocation lists
+	4. Registration authorities (RAs)
+	5. Entities
+	6. Certificate templates
+HTTP -> pakai port 80 -> kurang aman
+HTTPS -> pakai port 443 -> lebih aman tetapi masih 1/2 -> ditambah SSL/TLS
+Sertifikat SSL/TLS Gratis -> https://letsencrypt.org
+Saran dalam menggunakan website finance perhatikan sertifikatnya
+AWS juga menyediakan sertifikat melalui ACM atau AWS Certificate Manager
+Identity management adalah pembagian permission berdasarkan posisinya
+Prinsip dari identity management yaitu authentication-authorization-accounting
+Cara login user lewat cli:
+	aws conigure
+	access key DI: (masukan sesuai data)
+	secret access key: (masukan sesuai data)
+MFA atau multi faktor authentication bisa dilakukan di IAM pada bagian users
+MFA tidak dibuat tidak masalah, itu optional, tetapi lebih bagik digunakan
+AAA (authentication-authorization-accounting) itu prinsip yang perlu digunakan untuk mengetahui siapa yang login, dimana, kapan
+Teknik authentication: retina, smart card, smart phone, fingerprint
+Something that you are: fingerprint
+Something who you are: 
+Dictionary attacks adalah cara hacker untuk mendapatkan password melalui database, oleh sebab itu penting untuk melakukan enkripsi di database
+Sebaiknya untuk enkripsi database menggunakan package karena jika menggunakan KMS tidak efisien sedangkan jika menggunakan fitur dari MySQL atau dari database maka tidak efektif
+SSO atau single sign-on adalah login dengan satu akun, misalnya bisa login kemana saja yang mengijinkan SSO lewat akun gmail
+AWS juga memiliki layanan SSO
+Salah satu bentuk dari SSO adalah federated identities
+Amazon Cognito adalah layanan untuk user pool (sign up dan sign ) dan identity pool (ijin)
+IAM adalah cara kontrol akun, membuat user, group, dan roles
+Oleh sebab itu saat membuat akun AWS maka setelah root terbuat perlu dibuat IAM agar lebih aman akun rootnya
+Login:
+	1. Management console/web -> pakai root atau IAM user
+	2. CLI/SDK -> pakai access key
+IAM itu service global, sedangkan S3 itu juga global namun ada triknya
+IAM roles digunakan untuk memberikan akses waktu tertentu, sehingga cocok untuk delegasi
+Hati-hati dalam melakukan attaching utamanya pada role ya harus di attached ke IAM roles
+IAM policy:
+	1. resourced-based policy : ada resouce dan not resouce
+	2. 
+Deny -> eksplisit -> resource (misalnya S3, EC2, dst)
+Deny -> implisit  -> notresource (misalnya)
+	https://680343682900.signin.aws.amazon.com/console
+	https://680343682900.signin.aws.amazon.com/console
+	https://680343682900.signin.aws.amazon.com/console
+	Ketiganya sama yang beda hanya di username dan password
+Boundaries diperlukan untuk mencegah privilege escalation yaitu user biasa yang membuat user baru dengan akses yang lebih tinggi dari yang membuat user tersebut
+
+###############################################
+20/10/2022
+Stetfull di security group dan statefull di network itu berbeda karena statefull di network itu ada kapasitasnya sedangkan statefull di security itu terkait port apa yang akan dibatasi
+Kapan menggunakan stateless di network yaitu saat tahu IP addressnya berapa
+Sedangkan statefull itu untuk link-nya
+Format log di cloudTrail adalah .gz, layanan cloudTrail gratis di AWS
+Praktek terbaiknya nyalakan cloudTrail log untuk integritas validasi, pastikan secara global, dan integrasikan dengan Amazon CloudWatch
+Jadi file log itu ada 2, yaitu di cloudTrail dan cloudWatch
+AWS Config bisa digunakan bersama cloudTrail
+AWS Config digunakan untuk akses, audit, dan evaluasi sumber daya
+AWS Config juga bisa dikombinasikan dengan AWS SNS
+AWS config disimpan di S3 untuk melihat perubahan
+Overload adalah melambatnya komputer karena beban yang bertambah dan hampir atau telah melewati batas yang direkomendasikan
+AWS lambda dan API memungkinkan kita untuk membuat stop instance secara otomatis ketika SNS mengirim email, syaratnya perlu mendapatkan logic kodingnya
+Tindakan prevention: network hardening (pembuatan layer), system hardening (melakukan patching), public key infrastructure (sertifikat), identity menagement, dan AWS identity and access management
+RPO (recovery point objective): terkait data loss dan bagaimana mengembalikannya
+RTO (recovery time objective): terkait berapa lama waktu yang dibutuhkan untuk perbaikan
+BCP (business continuity plan): melakukan tindakan preventif dan proaktif
+DRP (disaster recovery plan): cara melakukan perbaikan dengan backup atau replikasi
+Jadi siklus hidup keamanan adalah prevention-detection-response-analysis
+Saat security berhasil di breach oleh hacker maka fase yang dilakukan adalah analysis
+
+###############################################
+21/10/2022
+Trusted Advisor menyajikan praktek terbaik dari pilar:
+	1. cost optimization
+	2. performance
+	3. security
+	4. fault tolerance
+	5. service limits
+Trusted advisor akan memberikan warna merah, kuning dan hijau
+Trusted advisor akan memberikan rekomendasi:
+	1. MFA on the root account (login ke root account dan aktivkan MFA)
+	2. IAM password policy (harus ada angka, huruf, kapital, kecil dsb)
+	3. security gorups-unrestricted access (area yang terbuka)
+	4. S3 bucket logging (tujuannya untuk memeriksa log konfigurasi)
+Developer, business, enterprise on-rame, enterprise
+Untuk bisa dilayani oleh trusted advisor minimal harus enterprise
+Kapan menggunakan root directory:
+	1. change account settings
+	2. restore AWS IAM user permission
+	3. change AWS support
+sebaiknya menggunakan cloudTrail dan S3 bucket dalam satu region agar tidak terkena biaya traffic yang mahal
+Security compliance ada 2 yaitu regulatory dan contractual (SLA dan PMI)
+PCI DSS (payment card industry) (data secirity)
+AWS account teams berisi Solution Architecs
+AWS developer support: 
+AWS business support: 24/7 dari phone, chat, atau email
+AWS enterprise support offer: 24/7 dari phone, chat, atau email 15 menit response
+AWS Advisories and bulletins: forum AWS yang ada tips atau best practice
+AWS auditor learning path: untuk memberi tahu jalur belajar
+Pilihan 11-16 Desember 2022 untuk ujian
+Python dilewati;;;;;
+Langsung ke database
+Database dibuat dalam bentuk tabel
+Amazon RDS digunakan untuk relasional
+Machine itu bisa dipecah, sedangkan engine itu satu kesatuan yang tidak bisa dimodular.
+Schema dalam database bisa phsical, logical, dan view
+Maksudnya schema itu seperti format, contohnya nama, id, alamat
+Maksud dari filed adalah nama
+
+###############################################
+24/10/2022
+Payment gateway sudah menggunakan relational
+Data yang lebih besar adalah noSQL
+SQL itu datanya berupa tabel
+noSQL atau non relational database biasanya disebut schemaless dengan format tidak rigid
+Misalnya size antara celana dan baju, bisa celana L dan baju 37, nah ini disebut schemaless, konsep ini lah yang membuat noSQL schemaless
+Service yang disediakan oleh AWS untuk noSQL adalah DynamoDB sedangkan untuk SQL adalah RDS.
+Hati-hati DynamoDB agak lebih mahal dariapda RDS.
+Selain itu di noSQL bisa melakukan column nested misalnya dalam kolom kelas ada kolom 1, 2, 3.
+noSQL biasanya digunakan untuk fraud detection, internet of things, dan social network
+Ketika semua data dikumpulkan maka akan ditransfer ke data warehouse atau data lake dengan Amazon Redshift
+Biasanya untuk transfer data menggunakan JSON
+Format untuk transfer data:
+	1. JSON -> lebih global
+	2. csv -> cocok untuk data analysis
+	3. pickle
+kelebihan dari SQL: diketahui banyak orang, mudah ditulis, support transaction
+kelemahan dari SQL: vertical scalling, fixed schema
+contoh vertical scalling -> 2core 2GB menjadi 4core 8GB
+contoh horizontal scalling -> 2core 2GB menjadi 2core 2GB dan 2core 2GB
+kelebihan noSQL: flexible schema (schemaless), horizontal scalling
+kelemahan noSQL: relatif teknologi baru, tidak ada garansi integritas data
+Database well-designed:
+	1. Clear: database clean dan konsisten
+	2. Essential: sesuai tujuan
+	3. Cooperative: terintegrasi dengan programs atau service
+	4. Efficient: seberapa cepat user melakukan task untuk menggunakan database misalnya 2 detik
+	5. Precise: data di dalam database harus akurat
+	6. Flexible: mengubah database
+	7. Reuseable: bisa digunakan kembali untuk aplikasi lain
+Identifikasi database yang anomali
+	1. Insertion anomaly: tidak bisa menambah data karena ada data yang masih kosong
+	2. Update anomaly: misalnya updatenya double
+	3. Deletion anomaly: menghapus 
+Hindari * atau wildcard dalam melakukan query karena itu akan menurunkan performa dari server
+Lazy loading: melakukan query hanya pada layar yang tampak, jika discroll maka layar baru akan di query
+Untuk melakukan validasi di form registrasi gunakan not null
+Database relation schema:
+	1 to 1
+	1 to many
+	many to 1
+	many to many
+DBMS atau database management system adalah software atau engine contohnya workbench
+RDS bisa autoscalling horizontal tetapi nanggung, caranya dengan RDS dan Aurora replica
+Ada role dalam database relasional:
+	1. Application developer: membuat aplikasi dan manipuasi data di dashboard
+	2. End user: akses database
+	3. Data analyst: GIGO (garbage in garbage out) membersihkan data dan menganalisa dengan SQL command
+	4. Database administrator: mengatur database dan tabel
+Semua akan full stack pada waktunya
+Error handling ada: sisi user, sisi server, sisi logic
+Saat membuat syntax SQL di JavaScript sebaiknya menggunakan kapital untuk membedakan mana syntax SQL dan bukan, selain itu untuk debugging
+Database transaction adalah reproduksi dari satu atau lebih perubahan dalam database
+ACID: atomicity (setiap step harus berhasil), consistency (tidak menyalahi), isolation (tidak terganggu), durability (saat server mati harus diulang)
+Kapan kita pakai DB di atas EC2? saat kita ingin full control dan engine database pihak ketiga
+Kapan RDS? saat ingin traditional relational database
+Kapan DynamoDB? saat noSQL
+Kapan RedShift? saat data warehouse
+Kapan Amazon ElastiCache? untuk fast temporary storage
+Amazon EMR? saat hadoop
+Cara cek apakah mysql sudah terinstall dengan syntax: mysql --version
+Untuk hapus layar di session manager: clear atau ctr+l
+
+buat tabel:
+CREATE TABLE world.country (
+  `Code` CHAR(3) NOT NULL DEFAULT '',
+  `Name` CHAR(52) NOT NULL DEFAULT '',
+  `Conitinent` enum('Asia','Europe','North America','Africa','Oceania','Antarctica','South  America') NOT NULL DEFAULT 'Asia',
+  `Region` CHAR(26) NOT NULL DEFAULT '',
+  `SurfaceArea` FLOAT(10,2) NOT NULL DEFAULT '0.00',
+  `IndepYear` SMALLINT(6) DEFAULT NULL,
+  `Population` INT(11) NOT NULL DEFAULT '0',
+  `LifeExpectancy` FLOAT(3,1) DEFAULT NULL,
+  `GNP` FLOAT(10,2) DEFAULT NULL,
+  `GNPOld` FLOAT(10,2) DEFAULT NULL,
+  `LocalName` CHAR(45) NOT NULL DEFAULT '',
+  `GovernmentForm` CHAR(45) NOT NULL DEFAULT '',
+  `HeadOfState` CHAR(60) DEFAULT NULL,
+  `Capital` INT(11) DEFAULT NULL,
+  `Code2` CHAR(2) NOT NULL DEFAULT '',
+  PRIMARY KEY (`Code`)
+);
+
+
+###############################################
+25/10/2022
+CSV adalah teks sederhana yang informasinya dipisahkan dengan koma
+CSV biasanya digunakan untuk import atau ekspor data
+Pastikan jumlah kolom sama dengan jumlah koma
+\n itu artinya new line atau baris baru
+Cleaning data untuk: meningkatkan produktivitas, mengembangkan kualitas data, dan mengurangi error
+DQL: data query language, ini untuk yang lebih advance
+DDL: data definition language, nama kolomnya
+DML: data manipulation language maksudnya data yang ada di dalamnya
+Null statement digunakan sebagai pengganti atau merepresentasikan missing value
+Semakin banyak null maka datanya tidak bersih
+Supaya bersih maka harus not null
+Null tidak sama dengan zero atau 0
+Definisi data clean itu harus sesuai tujuan
+Required clauses: SELECT FROM
+Optional clauses: WHERE, GROUP BY, HAVING (itu digunakan jika ada group by), ORDER BY
+Perbedaan WHERE dan HAVING yaitu filtering-nya
+WHERE digunakan saat polos, sedangkan HAVING digunakan saat GROUP BY digunakan
+Ada 4 cara untuk akses instance di AWS, yaitu EC2 instance connect, session manager, SSH client, dan EC2 serial console
+Perbedaan CHAR dan VARCHAR adalah efisiensinya.
+CHAR akan selalu bernilai sama misalnya 4 bit
+Sedangkan VARCHAR bernilai berbeda bergantung data yang diinput
+
+###############################################
+26/10/2022
+WHERE dan GROUP BY tidak bisa digunakan bersamaan
+untuk menampilkan informasi table: 
+Operator di dalam SQL: arithmetic (+, -, *, /, %), comparison (=, !=, <> (tidak umum), >, <), logical (LIMIT)
+Contoh query:	
+	SELECT population*1.15
+	FROM country
+	WHERE name = 'Malta'
+Sebaiknya menggunakan AS pada population*1.15 AS populasi_tambahan
+DELETE, UPDATE, INSERT itu akan mengubah data
+level SELECT tidak akan mengubah data lama dan merupakan the best practice untuk memanipulasi data
+Alias bisa digunakan dalam satu query, jika berbeda query maka perlu dibuat lagi
+Logical operator : AND, OR, IN (mencari dengan kata lengkap), LIKE (mencari dengan potongan kata), BETWEEN, NOT
+Misalnya penggunaan IN:
+	SELECT name, district, population
+	FROM city
+	WHERE district IN ('Ontario','Alberta')
+LIKE operator:
+	LIKE 'b%' : mencari kata dengan awalan b
+	LIKE '%b' : mencari kata dengan akhiran b
+	LIKE '_b_' : cari yang tiga huruf tetapi tengahnya huruf b
+Di SQL ada build function: SUM, LOWER, UPPER, CURRENT_DATE()
+Agregate function:
+	AVG()
+	COUNT()
+	MAX()
+	MIN()
+	SUM()
+Contoh query penerapannya:
+	SELECT name, AVG(total)
+	FROM country;
+Contoh penerapan query DISTINCT:
+	SELECT DISTINCT CountryCode, District FROM city;
+EDA: explanatory data analytics
+Contoh lain:
+	SELECT COUNT(DISTINCT CountryCode) AS Unique_Country_Codes
+	FROM city;
+TRIM: memotong kepala dan ekor
+RTRIM: memotong ekor
+LTRIM: memotong kepala
+Perbedaan DISTINCT dan UNIQUE adalah pemeriksaan di DATABASE
+UNIQE digunakan untuk mengupdate data, jika data sudah ada maka otomatis ditolak
+DESC diperlukan untuk mengatur urutan dari terbesar ke terkecil karena secara default ascending
+Perhatikan penggunaan:
+	SELECT name, continent, surfacearea
+	FROM country
+	WHERE surfacearea >= 5000000
+	ORDER BY continent ASC, surfacearea DESC;
+
+###############################################
+27/10/2022
+UNION : duplikat dicuekin
+UNION ALL : duplikat dimasukin
+INTERSECT : inner join atau irisan
+MINUS : left join atau right join
+Contoh:
+	SELECT name, district, population FROM city
+	UNION
+	SELECT name, code, continent, population FROM country;
+Contoh:
+	SELECT name, district FROM city
+	UNION ALL
+	SELECT name, code, continent, population FROM country;
+JOIN clauses:
+	1. INNER JOIN: irisannya saja atau intersep
+	2. LEFT JOIN: kirinya saja
+	3. RIGHT JOIN: kanannya saja
+	4. FULL JOIN: semuanya
+Saat selesai query sebaiknya diexport terlebih dahulu kemudian buka sql lagi dan lakukan function misalnya
+Cara menggabungkan tabel dengan beda databases:
+	SELECT continent FROM databasesOne.table
+	UNION
+	SELECT name FROM databasesTwo.table
+Kemampuan query speed, server, jaringan, security, akan menentukan request database oleh client
+HA : high availability -> active passive
+FT : fault tolerance -> redundant
+endpoint RDS: lab-db.cfnuu7ym5bij.us-east-1.rds.amazonaws.com
+RDS tidak mendapatkan IP tetapi mendapatkan endpoint
+RDS hanya bisa diakses melalui server atau EC2
+RDS secara default membuat auto-scalling secara vertical
+Agar RDS bisa di auto-scalling secara horizontal maka diperlukan Amazon Aurora
+
+###############################################
+28/10/2022
+Buat RDS master, RDS StandBY, RDS Read Replica
+Subnet group itu analogi seperti rak
+Tujuan RDS master dan standby adalah disaster recovery
+Tujuan read replica adalah hanya untuk membaca data saja
+Database RDS itu menggunakan DB instance, yang sebetulnya underlyingnya adalah EC2 instance
+Aurora DB cluster adalah satu atau lebih DB instance yang bekerja pada suatu cluster
+RDS yang primary dan replica bisa di naik turunkan (maksudnya primary bisa jadi replica dan sebaliknya)
+Ada 6 engine di RDS, yaitu Amazon Aurora, MySQL, MariaDB, PostgreSQL, Oracle, Microsoft SQL server
+endpoints: aurora.cluster-cafh7hyoinnm.us-east-1.rds.amazonaws.com
+mysql -u admin --password='admin123' -h <endpoint_goes_here>
+mysql -u admin --password='admin123' -h aurora.cluster-cafh7hyoinnm.us-east-1.rds.amazonaws.com
+kalau ganti port jadi 5000:
+mysql -u admin --password='admin123' -h aurora.cluster-cafh7hyoinnm.us-east-1.rds.amazonaws.com:5000
+kalau menggunakan KMS:
+mysql -u admin --password='admin123' -h aurora.cluster-cafh7hyoinnm.us-east-1.rds.amazonaws.com:5000
+Perhatikan saat menggunakan layanan:
+	Lots of large binary objects			menggunakan:S3
+	Automated scalability				menggunakan:DynamoDB
+	Name/Value data structure			menggunakan:DynamoDB
+	Data is not well structured or unpredictable	menggunakan:DynamoDB
+Perbedaan realtional dan nonrelational:
+	1. specific data types vs flexible column structure
+DynamoDB merupakan noSQL yang serverless
+Masalah dalam database:
+	1. throttle
+	2. bottleneck
+	3. 
+RDS disimpan dalam VPC(AZ(Subnet(private subnet(RDS)))
+DynamoDB disimpan dalam region tetapi tidak di dalam VPC, dan koneknya dengan gateway endpoint dengan perantara VGA (virtual gateway)
+Dalam tabel itu ada 3, yaitu tables, items, dan attributes (kolom)
+Kolom = field (SQL) = attributes (dynamoDB) = feature (data science)
+item itu baris
+Primary key ada 2, yaitu simple primary key dan composite primary key
+
+###############################################
+31/10/2022
+Kalau buat aplikasi digambar di flowchart
+Helpful tools: fishbone chart atau cause-effect diagram
+DAX : DynamoDB Accelerator yang merupakan cache
+CU: ada dua yaitu read (RCU) dan write (WCU)
+RCU: ada 2 yaitu evently consistent dan strongly consistent
+	di read untuk 1 CU = 4 kb dengan strongly consistent
+	jika datanya 11kb maka akan butuh 3CU dengan strongly consistent
+	kalau evently untuk 11kb maka dibagi dua yaitu 1.5CU
+WCU: ada 2 yaitu standard dan transaction
+	di write pada st
+Scan/Query pilih mana? sebaiknya gunakan query karena scan boros CU
+Secondary index di DynamoDB create ada 2, yaitu local index dan global index
+Saat membuat local index maka primary key tidak perlu dibuat sedangkan pada global index bisa dibuat kembali primary key-nya
+Jika ingin menggunakan TTL maka perlu seting time epoch time converter di epochconverter.com
+Security group bisa digunakan untuk akses SSH misalnya selain menggunakan IP
+CAF atau cloud adoption framework yang memperhatikan six core perspective
+Dari 6, dibagi 2 menjadi 3 untuk fokus kemampuan bisnis dan 3 untuk kemampuan teknikal
+3 focus on business capabilities: business, people, governance
+3 focus on technical capabilities: platform, security, operations
+waterfall ditinggalkan karena tunggu-tungguan sedangkan agile bisa bekerja bersama-sama
+Divisi yang paling tinggi cost-nya adalah marketing kemudian IT
+
+###############################################
+JUMPSTART ON AWS
+AWS Cloud Adoption Framework -> business (business, people, governance) and technical (platform, security, operations)
+AWS Well Architected Framework
+AWS Identity and Access Management
+S3
+EC2 Instance
+AWS Elastic Beanstalk
+Elastic Load Balancing
+Amazon EC2 Autoscaling
+Amazon Route 53
+Amazon CloudFront
+AWS Lambda
+Amazon APIs and REST
+AWS Step Functions
+Amazon Redshift
+Amazon Aurora
+Amazon VPC
+Amazon EBS
+Elastic File System
+Amazon Glacier
+Amazon Storage Gateway
+###############################################
+
+###############################################
+01/11/2022
+Sebaiknya customer menggunakan Arsitektur kerangka kerja AWS
+AWS Well Architected Framework tidak akan menyediakan implementasi secara detail dan pola arsitektur atau topologinya
+AWS WAF hanya menyediakan pertanyaan kritis, solusi layanan
+Pillar dari AWS WAF ada 5, yaitu:
+	1. Operational Excellence	-> kemampuan memonitor sistem (CloudFormation)
+	2. Security			-> kemampuan memantau dan melindungi
+	3. Reliability			-> kemampuan mempertahankan dan menyiapkan sistem
+	4. Performance Efficiency	-> kemampuan menggunakan sumber daya cloud (gunakan serverless)
+	5. Cost optimization		-> kemampuan untuk menghindari biaya yang tidak penting
+CloudFormation adalah IaaC atau infrastructure as a code yang ditulis dengan JSON atau YAML
+Kelebihan fitur dari CF adalah adanya change-set yaitu semacam preview sebelum dilakukan perubahan
+Ada satu lagi drift yang digunakan untuk melihat apa perbedaannya setelah diimplementasikan
+Throtle : aplikasi lambat, biasanya karena sumber daya yang kecil
+Prinsip well architected:
+	1. Stop guessing your capacity needs -> spek terlalu tinggi salah, spek terlalu rendah salah
+	2. Test systems at production scale
+	3. Automate -> butuh effort lebih untuk membuat otomasi
+	4. Allow for evolutionary architectures -> harus mau belajar ketika ada update teknologi
+	5. Drive architectures using data
+	6. Improve through game days -> cari dokumentasinya
+Kondisi di lapangan terjadi benturan antara orang manajemen dan IT, misalnya orang manajemen ingin sebuah fitur tambahan yang ternyata perlu menggunakan framework baru di minggu depan atau bulan depan, sedangkan sumber daya IT terbatas
+Bisnis bisa mendapatkan keuntungan dari inovasi yang baru, yaitu berpeluang digunakan oleh customer
+Konsep elastisitas sedangkan teknis high availability
+Everythin fails all the time -Werner Vogels-
+Reliability: mengukur berapa panjang sumber daya sesuai fungsinya
+Availability(SLA): persentase sumber daya yang digunakan secara normal
+High availability: memastikan downtime minimum
+Goal dari HA adalah:
+	1. Sistem berfungsi dan dapat diakses secara umum
+	2. Minimumkan downtime
+	3. Minimalkan intervensi manusia
+Faktor yang mempengaruhi HA:
+	1. Fault tolerance :
+	2. Scalability : tanpa ganti kode
+	3. Recoverability : 
+Ada 6 keuntungan dari penggunaan cloud computing:
+	1. Stop buying hardware
+	2. Bisa diperbanyak
+	3. Flexible
+	4. Increase speed and agility
+	5. Stop spending money
+	6. Go gobla in minutes
+###############################################
+02/11/2022
+System Operational atau SysOps adalah bagaimana melakukan administrasi secara besar dan multi user
+Seringkali SysOps melakukan automation
+Tools CI/CD: gitLab, AWS CodeCommit
+CodeArtifact digunakan untuk menyiapkan dan mengoperasikan infrastruktur yang diperlukan untuk mengelola repositori
+AWS Identity and Access Management (IAM) mengatur autentikasi dan otorisasi
+Untuk membuat file JSON di AWS IAM bisa menggunakan policysim.aws.amazon.com
+Cara akses ke AWS service bisa menggunakan AWS CLI, SDK, AWS Management Console
+Tipe credentials:
+	1. Email address dan password -> root
+	2. IAM user name dan password -> IAM atau satu level di bawah root
+	3. Access keys -> bisa level IAM dan root biasanya digunakan untuk masuk dari linux [aws configure]
+IAM best practice:
+	1. Avoid using root user credentials for daily administration
+	2. Least privilege
+	3. Use IAM role to provide cross-account user
+	4. Implement MFA to provide an additional level of account security
+Untuk menggunakan AWS CLI install dulu, cek di dokumentasi AWS
+Alasan menggunakan CLI: bisa membuat otomasi dan membangun infrastruktur
+hostnamectl : command yang digunakan untuk mengetahui spesifikasi, mirip seperti dxdiag
+
+###############################################
+03/11/2022
+System manager adalah pengaturan sistem yang memungkinkan terjadinya automasi
+Pengaturan automation dapat dilakukan dengan menggunakan JSON melalui Amazon CloudWatch sebagai trigger
+Install SSM agent on premise digunakan agar bisa melakukan SSM
+aws ssm send-command --document-name "AWS-ApplyAnsiblePlaybooks" --document-version "1" --targets '[{"Key":"InstanceIds","Values":["i-04b7e5f6d20f5084a"]}]' --parameters '{"SourceType":["GitHub"],"SourceInfo":["{}"],"InstallDependencies":["True"],"PlaybookFile":["hello-world-playbook.yml"],"ExtraVariables":["SSM=True"],"Check":["False"],"Verbose":["-v"],"TimeoutSeconds":["3600"]}' --timeout-seconds 600 --max-concurrency "50" --max-errors "0" --region us-east-1
+ip untuk mendapatkan metadata: 169.254.169.254
+contoh mengambil metadata:
+	# Get region
+	AZ=`curl -s http://169.254.169.254/latest/meta-data/placement/availability-zone`
+	export AWS_DEFAULT_REGION=${AZ::-1}
+
+	# List information about EC2 instances
+	aws ec2 describe-instances
+PowerShell juga bisa digunakan sebagaimana AWS CLI
+AWS CloudFormation: layanan yang bisa membuat banyak server dengan kode
+Ingin melihat preview sebelum di apply gunakan 
+Sedangkan untuk melihat perbandingan setelah dan sebelum gunakan drift
+Hosting website static di AWS S3 itu serverless
+Create bucket dari dokumentasi:
+	aws s3api create-bucket --bucket jokourno313 --region us-west-2 --create-bucket-configuration LocationConstraint=us-west-2
+
+###############################################
+04/11/2022
+Tujuan dari programming adalah automation
+Seperti bahasa manusia, bahasa pemrograman menggunakan punctuation (operators, delimiters), grammar (structure, syntax), dan vocabulary (keyword, identifiers)
+Compiled languages: C/C++, basic, GoLang
+Interpreter languages: Python, Ruby, JavaScript
+
+###############################################
+07/11/2022
+logic -> pseudo -> coding
+Kalau di python tidak menggunakan {} tetapi menggunakan indentasi setelah tanda :
+prompt = input di python
+Perbedaan method dan function -> class
+Method menggunakan class
+DRY : don't repeat yourself
+KISS : keep it simple, stupid
+Function ada 2 jenis, yaitu fruitful dan non-fruitfull
+Function fruitfull -> mengembalikan sesuatu
+
+
+
+
+
+
+
+
+
+###############################################
+JUMPSTART ON AWS ADVANCED
+Amazon CloudWatch
+AWS CloudTrail
+AWS Organizations
+AWS Cost Management and Best Practices
+AWS Support Services
+AWS CloudFormation
+###############################################
+
+###############################################
+
+
+###############################################
+
+###############################################
+General interview questions
+1. Tell me about a period when you had to meet a deadline. How did you progress? What was the result?
+2. How has your prior training prepared you for this job?
+3. Give me an example of a period at a previous job when you took the initiative to improve or streamline a task. Why was a change required? What was the outcome?
+4. Tell me about a time when you had to meet a deadline that didn’t give you enough time to work on the project. How did you proceed? What was the outcome?
+5. Tell me about a supervisor from a previous job. What was his or her management approach? How about the most difficult supervisor you have had? Why did you think it was difficult to work with him or her?
+Possible follow up question: What did you do to make sure that you could work with this manager? What did you learn about your experiences?
+Or Tell me about the best supervisor you have had. What made this supervisor stand out?
+
+General cloud interview questions 
+6. What is cloud computing?
+Cloud computing can be defined as the on-demand delivery of compute power, database, storage, applications, and other IT resources via the internet with pay-as-you-go pricing.
+7. What is the difference between black-box testing and white-box testing?
+Black-box testing refers to a testing scenario where the internal structure, design, and implementation are unknown to the tester. White-box testing refers to a testing scenario where the internal structure, design, and implementation are known to the tester.
+Possible follow up question: What is the difference between static analysis and dynamic analysis?
+Static analysis is when you go through the code looking for errors.
+Dynamic analysis is when the code is in an operational or a runtime state. Memory usage is monitored, along with functional behavior, response time, and other performance benchmarks.
+8. Can you explain the purpose of a function? Reusability is the primary purpose of a function.
+9. How do you troubleshoot a technical problem?
+There are no right or wrong answers. You can apply some critical thinking to address this question. Also apply what you recall from the deployment models that you explored during class.
+
+Academy Cloud Operations—Module 1, section 1
+1. What are the three models of cloud computing? Can you provide me with examples of each model?
+The three models are infrastructure as a service (IaaS), platform as a service (PaaS), and software as a service (SaaS).
+IaaS (or infrastructure as a service) – Typically provides access to networking features and computers (virtual or on dedicated hardware). An example that uses AWS could be Amazon Elastic Compute Cloud (Amazon EC2).
+PaaS (or platforms as a service) – Reduces the need for companies to manage the underlying infrastructure (usually, hardware and operating systems). An example that uses AWS could be AWS Elastic Beanstalk.
+SaaS (software as a service) – Provides your customer with a completed product that is run and managed by the service provider. An example could be AWS.
+2. At our company, we mainly employ an [all-in-cloud, hybrid, or private cloud] cloud deployment model. Can you describe the benefits of using this cloud deployment model?
+All-in-cloud – The benefit of all-in-cloud is that it’s a cloud-based application that is fully deployed in the cloud, and all parts of the application run in the cloud. An example of all-in-
+cloud is an application that was either created in the cloud or was migrated from an existing infrastructure.
+Or
+Hybrid – Hybrid deployment is a way to connect infrastructure and applications between cloud-based resources and existing resources that are not located in the cloud. An example of a hybrid deployment model is when an organization extends its infrastructure into the cloud while connecting cloud resources to an internal system. An advantage of this would be a data center extension. A company could run on-premises networking, security, storage, and access control infrastructure along with AWS to create a data center extension, and run backups and disaster recovery to the cloud.
+Or
+Private cloud – With private cloud, you deploy resources on-premises. You then use virtualization and resource-management tools. It sometimes called on-premises deployment. An advantage of this model would be for use with mission-critical workloads, or highly regulated workloads.
+
+Academy Cloud Operations—Module 1, section 2 
+3. What is a web service?
+A web service is any piece of software that makes itself available over the internet or on private (intranet) networks. A web service uses a standardized format—such as Extensible Markup Language (XML) or JavaScript Object Notation (JSON)—for the request and the response of an application programming interface (API) interaction.
+
+Module 1: Section 3 4. How should we ensure the availability of mission-critical system resources on AWS?
+A way to ensure that mission-critical resources are available is by creating backups across multiple isolated locations or Availability Zones. Availability Zones comprise one or more discrete data centers that are designed for fault isolation.
+5. What is the difference between Amazon CloudFront and Amazon Route 53?
+Amazon CloudFront is a content delivery network (CDN) service. Amazon Route 53 is a Domain Name System (DNS) service. CDNs are used to distribute content to users to reduce latency. A DNS service is a globally distributed service that translates human-readable names like www.example.com into their numeric IP addresses.
+6. What service provides resizable compute capacity in the cloud?
+onfigurable virtual compute capacity. You can select from a variety of operating systems and resource configurations (such as memory, CPU, storage, etc.).
+7. How do you launch an EC2 instance?
+From the AWS Management Console, go to the Compute category, select Amazon EC2, and choose Launch Instance. Then, choose the instance type that you need, and configure it to meet the needs of your customer. Finally, launch the instance.
+8. When should I use AWS Lambda?
+AWS Lambda makes it easy to execute serverless code in response to events, such as changes to Amazon Simple Storage Service (Amazon S3) buckets, updates to an Amazon DynamoDB table, or custom events that are generated by your applications or devices.
+9. What is automatic scaling? What is the purpose of automatic scaling?
+Automatic scaling (or dynamic scaling) enables organizations to scale Amazon EC2 (or other service resource) capacity up or down automatically according to conditions that are defined for a particular workload. It’s used to help maintain application availability and ensures that the desired number of service resources are running. It also enables resources to scale in and scale out to match workload demand.
+10. What happens to a customer’s data when an Amazon EC2 instance is terminated?
+The data that is stored on the EC2 instance store will persist only as long as that instance is running. Possible follow up question: Is it possible to keep the data?
+The data can be stored on an Amazon Elastic Block Store (Amazon EBS) volume. The data will persist independently of the life of the instance. Another way to keep the data is to back up the data to Amazon S3.
+11. When you choose an Amazon Machine Image (AMI), what should you consider? Here’s a chance for you to critically think about customer needs.
+An example of considerations could include: - Core count - Memory size - Storage size and type - Network performance - CPU technologies
+12. What is the best way to explain Amazon Virtual Private Cloud (Amazon VPC) to a potential customer?
+Amazon VPC is your network environment in the cloud. It enables you to create a private network within the AWS Cloud that uses many of the same concepts and constructs as an on-premises network. Customers can define normal networking configuration items, such as IP address ranges, subnet creation, route table creation, network gateways, and security settings.
+13. What are two ways to ensure security within a virtual private cloud (VPC)?
+AWS provides two features that you can use to increase security in your VPC: security groups and network access control lists (network ACLs).
+14. What is the difference between security groups and network ACLs?
+Security groups control inbound and outbound traffic for your instances, and network ACLs control inbound and outbound traffic for your subnets.
+15. How do you allow access to your Amazon VPC resources without sharing your security credentials?
+You must create and attach an AWS Identity and Access Management (IAM) policy to the IAM user or to the group that the IAM user belongs to. The IAM user must be given permission to use the specific Amazon VPC resources and Amazon EC2 API actions that they need.
+16. How do you monitor traffic to a VPC?
+VPC Flow Logs is a feature that enables you to capture information about the IP traffic that goes to and from network interfaces in your VPC.
+17. When you establish a VPC, how do you determine where customer network traffic is directed?
+A route table contains a set of rules, called routes, that are used to determine where network traffic is directed. Each subnet in an Amazon VPC must be associated with a route table. The table controls the routing for the subnet.
+18. What is VPC peering?
+An Amazon VPC peering connection is a networking connection between two VPCs that enables instances in either VPC to communicate with each other as if they are in the same network.
+
+Academy Cloud Operations—Module 2, section 5 
+19. What is the purpose of load balancing?
+This question is a critical-thinking question. 20. What are the types of load balancers that AWS offers?
+Elastic Load Balancing offers three types of load balancers: The Application Load Balancer, the Network Load Balancer, and the Classic Load Balancer.
+First, an Application Load Balancer functions at the application level. It supports content-based routing and applications that run-in containers.
+Next, the Network Load Balancer handles requests while maintaining high throughput at ultra-low latency.
+Finally, the Classic Load Balancer provides basic load balancing across multiple Amazon EC2 instances. It operates at both the request level and the connection level.
+21. How do you monitor the performance of your customer’s workload? You can monitor the performance of your customer’s workload by using Amazon CloudWatch.
+
+Module 3 22. IAM is used to manage users and groups. What else can IAM do? IAM enables you to:
+Manage IAM users and their access. You can create users in IAM and assign individual security credentials to these users. Or
+Manage IAM roles and their permissions. You can create roles in IAM and manage permissions to control which operations can be performed by the entity, or the AWS service that assumes the role.
+Or
+Manage federated users and their permissions. You can enable identity federation to allow existing identities (users, groups, and roles) from your corporate directory to access the AWS Cloud.
+And
+You can manage what resources can access, such as whether a resource can terminate EC2 instances. You can also define required credentials based on context, including who accesses which service and what the actions that they are trying to take.
+23. You must attach the same policy to multiple IAM users that require the same permissions. What is the best way to do this action?
+When you must attach the same policy to multiple IAM users, you should put all the users in a group. You should then attach the policy to the group instead of attaching the policy individually to each user.
+
+Module 5 24. What are the benefits of using AWS Cost Explorer?
+AWS Cost Explorer enables you to explore your AWS costs and usage at both a high level and at a detailed level of analysis.
+25. What is AWS Budgets, and how does it work?
+AWS Budgets enables you to set a budget that alerts you when you exceed a specified level. You can also use AWS Budgets to forecast your budgeted costs or usage amount. You can also set alerts based on customer use.
